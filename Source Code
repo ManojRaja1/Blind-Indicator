@@ -1,1 +1,59 @@
+// Blind Indicator Using Arduino
+
+// Define pins for ultrasonic sensor
+const int trigPin = 9;
+const int echoPin = 10;
+
+// Define pin for buzzer
+const int buzzerPin = 8;
+
+// Variable to store the duration of the pulse
+long duration;
+
+// Variable to store the distance calculated
+int distance;
+
+void setup() {
+  // Initialize the serial communication
+  Serial.begin(9600);
+
+  // Set the trigger pin as output
+  pinMode(trigPin, OUTPUT);
+
+  // Set the echo pin as input
+  pinMode(echoPin, INPUT);
+
+  // Set the buzzer pin as output
+  pinMode(buzzerPin, OUTPUT);
+}
+
+void loop() {
+  // Clear the trigPin by setting it LOW
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  // Set the trigPin HIGH for 10 microseconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read the echoPin, pulseIn() returns the duration (time) of the pulse
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate the distance using the speed of sound (340 m/s)
+  distance = duration * 0.034 / 2;
+
+  // Print the distance to the serial monitor
+  Serial.println(distance);
+
+  // If the distance is less than 50 cm, activate the buzzer
+  if (distance < 50) {
+    digitalWrite(buzzerPin, HIGH);
+  } else {
+    digitalWrite(buzzerPin, LOW);
+  }
+
+  // Small delay before the next reading
+  delay(100);
+}
 
